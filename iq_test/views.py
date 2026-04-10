@@ -28,6 +28,7 @@ def start_session(request):
     return JsonResponse({'status': 'error', 'message': 'Only POST allowed'}, status=405)
 
 @csrf_exempt
+@csrf_exempt
 def get_next_task(request):
     """Эндпоинт 2: Выдача следующей задачи по алгоритму калибровки (балансировка)"""
     if request.method == 'POST':
@@ -36,97 +37,92 @@ def get_next_task(request):
             session_id = data.get('session_id')
             session = TestSession.objects.get(id=session_id)
             
-            # Находим ID уже решенных в ЭТОЙ сессии задач
             solved_task_ids = session.answers.values_list('task_id', flat=True)
             solved_count = len(solved_task_ids)
             
-            # --- ЛИМИТ ВОПРОСОВ ---
             TOTAL_QUESTIONS_LIMIT = 20
             
-            if solved_count >= TOTAL_QUESTIONS_LIMIT:
-                # === НАЧАЛО БЛОКА ЗАВЕРШЕНИЯ ТЕСТА ===
-        
-                # 1. Сохраняем результат за пользователем (если он вошел)
+            # Вспомогательная функция для формирования ответа (чтобы не дублировать код)
+            # Вспомогательная функция для формирования ответа
+            def get_finished_response(session, solved_count):
                 if request.user.is_authenticated:
                     session.user = request.user
                 
                 session.completed_at = timezone.now()
                 session.save()
 
-                # 2. Собираем умную аналитику (из твоей правильной версии!)
-                logs = session.answers.select_related('task').all()
-                analytics = {}
-                correct_total = 0
+                correct_total = session.answers.filter(is_correct=True).count()
+                total_asked = session.answers.count()
                 
-                for log in logs:
-                    t_type = log.task.task_type 
-                    if t_type not in analytics:
-                        analytics[t_type] = {'correct': 0, 'total': 0}
-                    
-                    analytics[t_type]['total'] += 1
-                    if log.is_correct:
-                        analytics[t_type]['correct'] += 1
-                        correct_total += 1
-                        
-                weakest_type = None
-                lowest_pct = 1.0
+                # Ищем самую первую ошибку (сортируем по времени создания)
+                mistake_log = session.answers.filter(is_correct=False).order_by('created_at').first()
+                mistake_info = None
                 
-                for t_type, stats in analytics.items():
-                    pct = stats['correct'] / stats['total']
-                    if pct < lowest_pct:
-                        lowest_pct = pct
-                        weakest_type = t_type
-                        
-                # 3. Формируем рекомендацию
-                if weakest_type and lowest_pct <= 0.5:
-                    rec = f"Твоя база хороша, но задачи типа «{weakest_type}» даются тяжело. Обрати внимание на логику этих паттернов, чтобы пробить потолок IQ!"
-                elif correct_total == len(logs) and len(logs) > 0:
-                    rec = "Потрясающий результат! У тебя железобетонная логика и абсолютно нет слабых мест."
-                else:
-                    rec = "Отличный, сбалансированный результат! Твоя логика работает стабильно по всем типам визуальных матриц."
+                if mistake_log:
+                    task = mistake_log.task
                     
-                # 4. Отдаем на фронтенд
+                    # Вычисляем порядковый номер задачи (1, 2, 3...)
+                    all_answers_ids = list(session.answers.order_by('created_at').values_list('id', flat=True))
+                    task_number = all_answers_ids.index(mistake_log.id) + 1 if mistake_log.id in all_answers_ids else '?'
+
+                    # Собираем все варианты ответов (картинки)
+                    options = []
+                    for i in range(1, 9):
+                        option_field = getattr(task, f'option_{i}')
+                        if option_field and hasattr(option_field, 'url'):
+                            options.append({'id': f'option_{i}', 'url': option_field.url})
+                            
+                    # Приводим сырые ответы к формату 'option_X' для точного сравнения на фронте
+                    u_raw = mistake_log.user_answer
+                    u_raw = u_raw if u_raw.startswith('option_') else f'option_{u_raw}'
+                    
+                    c_raw = str(task.correct_answer)
+                    c_raw = c_raw if c_raw.startswith('option_') else f'option_{c_raw}'
+
+                    t_type_display = task.get_task_type_display() if hasattr(task, 'get_task_type_display') else task.task_type
+                    
+                    mistake_info = {
+                        'task_number': task_number,
+                        'task_type': t_type_display,
+                        'main_image': task.image_content.url if task.image_content else '',
+                        'options': options,
+                        'user_answer': mistake_log.user_answer.replace('option_', 'Вариант '),
+                        'correct_answer': str(task.correct_answer).replace('option_', 'Вариант '),
+                        'user_answer_raw': u_raw,
+                        'correct_answer_raw': c_raw
+                    }
+                    
                 return JsonResponse({
                     'status': 'finished',
-                    'final_score': correct_total, # Сырой счет
-                    'tasks_solved': solved_count,
-                    'total_asked': len(logs),
-                    'analytics': analytics,   
-                    'recommendation': rec     
+                    'correct_total': correct_total,
+                    'total_asked': total_asked,
+                    'is_registered': request.user.is_authenticated,
+                    'mistake_info': mistake_info,
+                    'session_id': str(session.id)
                 })
-                # === КОНЕЦ БЛОКА ЗАВЕРШЕНИЯ ТЕСТА ===
 
-            # Если тест продолжается, ищем доступные задачи
+            # === ЕСЛИ ТЕСТ ЗАВЕРШЕН (достигнут лимит) ===
+            if solved_count >= TOTAL_QUESTIONS_LIMIT:
+                return get_finished_response(session, solved_count)
+
+            # Если тест продолжается
             available_tasks = Task.objects.filter(is_active=True).exclude(id__in=solved_task_ids)
-            
-            # Ищем тип последней решенной задачи для чередования
             last_log = session.answers.order_by('-created_at').first()
             last_task_type = last_log.task.task_type if last_log else None
             
-            # Используем наш новый алгоритм из calibration.py!
             from .services.calibration import find_next_best_task
             next_task = find_next_best_task(available_tasks, last_task_type)
 
-            # Если активные задачи вообще кончились в базе
+            # === ЕСЛИ ЗАДАЧИ В БАЗЕ КОНЧИЛИСЬ РАНЬШЕ ЛИМИТА ===
             if not next_task:
-                correct_total = session.answers.filter(is_correct=True).count()
-                session.completed_at = timezone.now()
-                session.save()
-                return JsonResponse({
-                    'status': 'finished',
-                    'final_score': correct_total,
-                    'tasks_solved': solved_count
-                })
+                return get_finished_response(session, solved_count)
 
-            # Формируем список картинок-ответов
             options = []
             for i in range(1, 9):
                 option_field = getattr(next_task, f'option_{i}')
                 if option_field and hasattr(option_field, 'url'):
                     options.append({'id': f'option_{i}', 'url': option_field.url})
             
-            # Фейковая ошибка для красивого заполнения прогресс-бара на фронтенде
-            # Идет от 2.0 (пусто) до 0.2 (полностью заполнено)
             fake_error = 2.0 - (solved_count / TOTAL_QUESTIONS_LIMIT) * 1.8
 
             return JsonResponse({

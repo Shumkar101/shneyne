@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 660 660" width="660" height="660">
+<rect width="100%" height="100%" fill="#FFFFFF"/>
+<polygon points="115.00,45.00 185.00,115.00 115.00,185.00 45.00,115.00" fill="none" stroke="#040035" stroke-width="4" stroke-linejoin="round"/>
+<polygon points="330.00,45.00 396.57,93.37 371.14,171.63 288.86,171.63 263.43,93.37" fill="none" stroke="#040035" stroke-width="4" stroke-linejoin="round"/>
+<circle cx="330.00" cy="115.00" r="12.00" fill="#040035" stroke="none" stroke-width="0"/>
+<polygon points="545.00,45.00 605.62,80.00 605.62,150.00 545.00,185.00 484.38,150.00 484.38,80.00" fill="none" stroke="#040035" stroke-width="4" stroke-linejoin="round"/>
+<polygon points="115.00,260.00 169.73,286.36 183.24,345.58 145.37,393.07 84.63,393.07 46.76,345.58 60.27,286.36" fill="none" stroke="#040035" stroke-width="4" stroke-linejoin="round"/>
+<circle cx="115.00" cy="330.00" r="12.00" fill="#040035" stroke="none" stroke-width="0"/>
+<polygon points="330.00,260.00 379.50,280.50 400.00,330.00 379.50,379.50 330.00,400.00 280.50,379.50 260.00,330.00 280.50,280.50" fill="none" stroke="#040035" stroke-width="4" stroke-linejoin="round"/>
+<polygon points="545.00,260.00 590.00,276.38 613.94,317.84 605.62,365.00 568.94,395.78 521.06,395.78 484.38,365.00 476.06,317.84 500.00,276.38" fill="none" stroke="#040035" stroke-width="4" stroke-linejoin="round"/>
+<circle cx="545.00" cy="330.00" r="12.00" fill="#040035" stroke="none" stroke-width="0"/>
+<polygon points="115.00,475.00 156.14,488.37 181.57,523.37 181.57,566.63 156.14,601.63 115.00,615.00 73.86,601.63 48.43,566.63 48.43,523.37 73.86,488.37" fill="none" stroke="#040035" stroke-width="4" stroke-linejoin="round"/>
+<polygon points="330.00,475.00 367.84,486.11 393.67,515.92 399.29,554.96 382.90,590.84 349.72,612.16 310.28,612.16 277.10,590.84 260.71,554.96 266.33,515.92 292.16,486.11" fill="none" stroke="#040035" stroke-width="4" stroke-linejoin="round"/>
+<circle cx="330.00" cy="545.00" r="12.00" fill="#040035" stroke="none" stroke-width="0"/>
+<text x="545.00" y="590.00" font-family="Arial, Helvetica, sans-serif" font-size="140" font-weight="bold" fill="#040035" text-anchor="middle">?</text>
+</svg>

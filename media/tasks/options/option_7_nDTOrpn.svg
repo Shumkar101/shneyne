@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+<rect width="100%" height="100%" fill="#FFFFFF"/>
+<rect x="40.00" y="40.00" width="120.00" height="120.00" fill="none" stroke="#040035" stroke-width="4"/>
+<circle cx="60.00" cy="60.00" r="10.00" fill="#040035" stroke="none" stroke-width="0"/>
+<circle cx="100.00" cy="60.00" r="2.00" fill="#040035" stroke="none" stroke-width="0"/>
+<circle cx="140.00" cy="60.00" r="10.00" fill="#040035" stroke="none" stroke-width="0"/>
+<circle cx="60.00" cy="100.00" r="10.00" fill="#040035" stroke="none" stroke-width="0"/>
+<circle cx="100.00" cy="100.00" r="10.00" fill="#040035" stroke="none" stroke-width="0"/>
+<circle cx="140.00" cy="100.00" r="10.00" fill="#040035" stroke="none" stroke-width="0"/>
+<circle cx="60.00" cy="140.00" r="10.00" fill="#040035" stroke="none" stroke-width="0"/>
+<circle cx="100.00" cy="140.00" r="2.00" fill="#040035" stroke="none" stroke-width="0"/>
+<circle cx="140.00" cy="140.00" r="10.00" fill="#040035" stroke="none" stroke-width="0"/>
+<rect x="1.00" y="1.00" width="198.00" height="198.00" fill="none" stroke="#040035" stroke-width="2"/>
+</svg>

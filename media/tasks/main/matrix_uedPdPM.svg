@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="390" height="390" viewBox="0 0 390 390">
+<rect x="0" y="0" width="120" height="120" rx="8" fill="white" stroke="#e0e0e0" stroke-width="2" />
+<line x1="60" y1="15" x2="60" y2="105" stroke="#333" stroke-width="4" stroke-linecap="round" />
+<rect x="67" y="80" width="20" height="20" fill="white" stroke="#333" stroke-width="2" />
+<rect x="67" y="55" width="20" height="20" fill="white" stroke="#333" stroke-width="2" />
+<rect x="135" y="0" width="120" height="120" rx="8" fill="white" stroke="#e0e0e0" stroke-width="2" />
+<line x1="195" y1="15" x2="195" y2="105" stroke="#333" stroke-width="4" stroke-linecap="round" />
+<rect x="168" y="80" width="20" height="20" fill="#333" stroke="#333" stroke-width="2" />
+<rect x="168" y="55" width="20" height="20" fill="#333" stroke="#333" stroke-width="2" />
+<rect x="168" y="30" width="20" height="20" fill="#333" stroke="#333" stroke-width="2" />
+<rect x="202" y="80" width="20" height="20" fill="white" stroke="#333" stroke-width="2" />
+<rect x="270" y="0" width="120" height="120" rx="8" fill="white" stroke="#e0e0e0" stroke-width="2" />
+<line x1="330" y1="15" x2="330" y2="105" stroke="#333" stroke-width="4" stroke-linecap="round" />
+<rect x="303" y="80" width="20" height="20" fill="#333" stroke="#333" stroke-width="2" />
+<rect x="303" y="55" width="20" height="20" fill="#333" stroke="#333" stroke-width="2" />
+<rect x="303" y="30" width="20" height="20" fill="#333" stroke="#333" stroke-width="2" />
+<rect x="337" y="80" width="20" height="20" fill="white" stroke="#333" stroke-width="2" />
+<rect x="337" y="55" width="20" height="20" fill="white" stroke="#333" stroke-width="2" />
+<rect x="337" y="30" width="20" height="20" fill="white" stroke="#333" stroke-width="2" />
+<rect x="0" y="135" width="120" height="120" rx="8" fill="white" stroke="#e0e0e0" stroke-width="2" />
+<line x1="60" y1="150" x2="60" y2="240" stroke="#333" stroke-width="4" stroke-linecap="round" />
+<rect x="33" y="215" width="20" height="20" fill="#333" stroke="#333" stroke-width="2" />
+<rect x="33" y="190" width="20" height="20" fill="#333" stroke="#333" stroke-width="2" />
+<rect x="33" y="165" width="20" height="20" fill="#333" stroke="#333" stroke-width="2" />
+<rect x="67" y="215" width="20" height="20" fill="white" stroke="#333" stroke-width="2" />
+<rect x="67" y="190" width="20" height="20" fill="white" stroke="#333" stroke-width="2" />
+<rect x="67" y="165" width="20" height="20" fill="white" stroke="#333" stroke-width="2" />
+<rect x="135" y="135" width="120" height="120" rx="8" fill="white" stroke="#e0e0e0" stroke-width="2" />
+<line x1="195" y1="150" x2="195" y2="240" stroke="#333" stroke-width="4" stroke-linecap="round" />
+<rect x="168" y="215" width="20" height="20" fill="white" stroke="#333" stroke-width="2" />
+<rect x="168" y="190" width="20" height="20" fill="white" stroke="#333" stroke-width="2" />
+<rect x="270" y="135" width="120" height="120" rx="8" fill="white" stroke="#e0e0e0" stroke-width="2" />
+<line x1="330" y1="150" x2="330" y2="240" stroke="#333" stroke-width="4" stroke-linecap="round" />
+<rect x="303" y="215" width="20" height="20" fill="#333" stroke="#333" stroke-width="2" />
+<rect x="303" y="190" width="20" height="20" fill="#333" stroke="#333" stroke-width="2" />
+<rect x="303" y="165" width="20" height="20" fill="#333" stroke="#333" stroke-width="2" />
+<rect x="337" y="215" width="20" height="20" fill="white" stroke="#333" stroke-width="2" />
+<rect x="0" y="270" width="120" height="120" rx="8" fill="white" stroke="#e0e0e0" stroke-width="2" />
+<line x1="60" y1="285" x2="60" y2="375" stroke="#333" stroke-width="4" stroke-linecap="round" />
+<rect x="33" y="350" width="20" height="20" fill="white" stroke="#333" stroke-width="2" />
+<rect x="67" y="350" width="20" height="20" fill="#333" stroke="#333" stroke-width="2" />
+<rect x="67" y="325" width="20" height="20" fill="#333" stroke="#333" stroke-width="2" />
+<rect x="135" y="270" width="120" height="120" rx="8" fill="white" stroke="#e0e0e0" stroke-width="2" />
+<line x1="195" y1="285" x2="195" y2="375" stroke="#333" stroke-width="4" stroke-linecap="round" />
+<rect x="168" y="350" width="20" height="20" fill="white" stroke="#333" stroke-width="2" />
+<rect x="168" y="325" width="20" height="20" fill="#333" stroke="#333" stroke-width="2" />
+<rect x="168" y="300" width="20" height="20" fill="white" stroke="#333" stroke-width="2" />
+<rect x="270" y="270" width="120" height="120" rx="8" fill="white" stroke="#e0e0e0" stroke-width="2" />
+<text x="330" y="350" font-family="Arial" font-size="60" fill="#cccccc" text-anchor="middle">?</text>
+</svg>

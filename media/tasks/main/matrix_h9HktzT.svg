@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="390" height="390" viewBox="0 0 390 390">
+<rect x="0" y="0" width="120" height="120" rx="8" fill="white" stroke="#e0e0e0" stroke-width="2" />
+<rect x="25" y="25" width="70" height="70" fill="none" stroke="#333" stroke-width="4" />
+<circle cx="60" cy="40" r="8" fill="white" stroke="#333" stroke-width="3" />
+<circle cx="80" cy="60" r="8" fill="white" stroke="#333" stroke-width="3" />
+<circle cx="60" cy="80" r="8" fill="white" stroke="#333" stroke-width="3" />
+<circle cx="35" cy="35" r="4.5" fill="#333" />
+<rect x="135" y="0" width="120" height="120" rx="8" fill="white" stroke="#e0e0e0" stroke-width="2" />
+<rect x="160" y="25" width="70" height="70" fill="none" stroke="#333" stroke-width="4" />
+<circle cx="215" cy="60" r="8" fill="white" stroke="#333" stroke-width="3" />
+<circle cx="195" cy="80" r="8" fill="white" stroke="#333" stroke-width="3" />
+<circle cx="175" cy="60" r="8" fill="white" stroke="#333" stroke-width="3" />
+<circle cx="170" cy="35" r="4.5" fill="#333" />
+<circle cx="220" cy="35" r="4.5" fill="#333" />
+<circle cx="220" cy="85" r="4.5" fill="#333" />
+<rect x="270" y="0" width="120" height="120" rx="8" fill="white" stroke="#e0e0e0" stroke-width="2" />
+<rect x="295" y="25" width="70" height="70" fill="none" stroke="#333" stroke-width="4" />
+<circle cx="350" cy="60" r="8" fill="white" stroke="#333" stroke-width="3" />
+<circle cx="330" cy="80" r="8" fill="white" stroke="#333" stroke-width="3" />
+<circle cx="305" cy="35" r="4.5" fill="#333" />
+<circle cx="305" cy="85" r="4.5" fill="#333" />
+<rect x="0" y="135" width="120" height="120" rx="8" fill="white" stroke="#e0e0e0" stroke-width="2" />
+<rect x="25" y="160" width="70" height="70" fill="none" stroke="#333" stroke-width="4" />
+<circle cx="60" cy="175" r="8" fill="white" stroke="#333" stroke-width="3" />
+<circle cx="35" cy="170" r="4.5" fill="#333" />
+<rect x="135" y="135" width="120" height="120" rx="8" fill="white" stroke="#e0e0e0" stroke-width="2" />
+<rect x="160" y="160" width="70" height="70" fill="none" stroke="#333" stroke-width="4" />
+<circle cx="195" cy="175" r="8" fill="white" stroke="#333" stroke-width="3" />
+<circle cx="195" cy="215" r="8" fill="white" stroke="#333" stroke-width="3" />
+<circle cx="170" cy="170" r="4.5" fill="#333" />
+<rect x="270" y="135" width="120" height="120" rx="8" fill="white" stroke="#e0e0e0" stroke-width="2" />
+<rect x="295" y="160" width="70" height="70" fill="none" stroke="#333" stroke-width="4" />
+<circle cx="330" cy="175" r="8" fill="white" stroke="#333" stroke-width="3" />
+<circle cx="350" cy="195" r="8" fill="white" stroke="#333" stroke-width="3" />
+<circle cx="310" cy="195" r="8" fill="white" stroke="#333" stroke-width="3" />
+<circle cx="305" cy="170" r="4.5" fill="#333" />
+<circle cx="355" cy="170" r="4.5" fill="#333" />
+<circle cx="355" cy="220" r="4.5" fill="#333" />
+<circle cx="305" cy="220" r="4.5" fill="#333" />
+<rect x="0" y="270" width="120" height="120" rx="8" fill="white" stroke="#e0e0e0" stroke-width="2" />
+<rect x="25" y="295" width="70" height="70" fill="none" stroke="#333" stroke-width="4" />
+<circle cx="60" cy="350" r="8" fill="white" stroke="#333" stroke-width="3" />
+<circle cx="40" cy="330" r="8" fill="white" stroke="#333" stroke-width="3" />
+<circle cx="85" cy="305" r="4.5" fill="#333" />
+<rect x="135" y="270" width="120" height="120" rx="8" fill="white" stroke="#e0e0e0" stroke-width="2" />
+<rect x="160" y="295" width="70" height="70" fill="none" stroke="#333" stroke-width="4" />
+<circle cx="195" cy="310" r="8" fill="white" stroke="#333" stroke-width="3" />
+<circle cx="215" cy="330" r="8" fill="white" stroke="#333" stroke-width="3" />
+<circle cx="170" cy="305" r="4.5" fill="#333" />
+<circle cx="220" cy="305" r="4.5" fill="#333" />
+<circle cx="170" cy="355" r="4.5" fill="#333" />
+<rect x="270" y="270" width="120" height="120" rx="8" fill="white" stroke="#e0e0e0" stroke-width="2" />
+<text x="330" y="350" font-family="Arial" font-size="60" fill="#cccccc" text-anchor="middle">?</text>
+</svg>

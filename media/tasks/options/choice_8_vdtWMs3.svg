@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="150" height="150" viewBox="0 0 150 150">
+<rect width="146" height="146" x="2" y="2" rx="12" fill="white" stroke="#000000" stroke-width="3" />
+<g transform="translate(0, 0)">
+<polygon points="75.0,37.0 81.4656377752172,56.10081306187558 101.6295824562643,56.347524157501475 85.46162167924669,68.39918693812442 91.45798706418924,87.65247584249853 75.0,76.0 58.54201293581076,87.65247584249853 64.53837832075331,68.39918693812442 48.3704175437357,56.347524157501475 68.5343622247828,56.10081306187558" fill="none" stroke="#000000" stroke-width="4" stroke-linejoin="round"/>
+<rect x="40.0" y="30.0" width="70" height="70" fill="none" stroke="#000000" stroke-width="4" />
+<line x1="30" y1="125" x2="120" y2="125" stroke="#000000" stroke-width="4" stroke-linecap="round"/>
+<polyline points="108,115 120,125 108,135" fill="none" stroke="#000000" stroke-width="4" stroke-linejoin="round" stroke-linecap="round"/>
+<circle cx="20" cy="20" r="6" fill="#000000"/>
+<circle cx="130" cy="20" r="6" fill="#000000"/>
+</g>
+</svg>

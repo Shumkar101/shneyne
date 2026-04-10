@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Узнайте свой уровень IQ | Beta</title>
+    
+    <!-- ================= SEO & META ТЕГИ ================= -->
+    <meta name="description" content="Пройдите профессиональный адаптивный тест на уровень IQ. Умный алгоритм подстраивается под ваши ответы в реальном времени.">
+    <meta name="keywords" content="IQ тест, тест на интеллект, адаптивный тест, узнать свой IQ, логические задачи, матрицы Равена">
+    <meta name="author" content="IQMO">
+    
+    <!-- Open Graph (VK, Facebook, Telegram) -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://твой-домен.ru/"> <!-- Заменишь на свой реальный домен -->
+    <meta property="og:title" content="Узнайте свой уровень IQ | IQMO Beta">
+    <meta property="og:description" content="Современный адаптивный тест на уровень интеллекта. Узнайте свой точный результат за 15 минут.">
+    <meta property="og:image" content="/static/preview.jpg"> <!-- Картинка для превью в мессенджерах -->
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://твой-домен.ru/">
+    <meta property="twitter:title" content="Узнайте свой уровень IQ | IQMO Beta">
+    <meta property="twitter:description" content="Современный адаптивный тест на уровень интеллекта. Узнайте свой точный результат за 15 минут.">
+    <meta property="twitter:image" content="/static/preview.jpg">
+
+    <!-- Фавиконка (Векторная SVG прямо в коде) -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230f172a'/><text x='50' y='50' font-family='sans-serif' font-weight='bold' font-size='40' fill='%230ea5e9' dominant-baseline='central' text-anchor='middle'>IQ</text></svg>">
+    <!-- ================================================= -->
+    
+    <!-- Подключаем шрифты: Inter для текста, JetBrains Mono для цифр -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    
+    <!-- Подключаем Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    colors: {
+                        brand: {
+                            black: '#0f172a',    /* Темно-синий/черный */
+                            blue: '#0ea5e9',     /* Яркий синий */
+                            blueDark: '#0284c7', 
+                            gray: '#64748b',     /* Серый для текста */
+                            light: '#f8fafc',
+                            bg: '#f4f6f9',       /* Светло-серый фон страницы */
+                            border: '#e2e8f0'
+                        }
+                    },
+                    boxShadow: {
+                        'card': '0 4px 20px rgba(0, 0, 0, 0.03)',
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        body {
+            background-color: #f4f6f9;
+            color: #0f172a;
+            -webkit-font-smoothing: antialiased;
+        }
+        
+        /* Плавные переходы экранов */
+        .fade-enter { opacity: 0; transform: translateY(10px); }
+        .fade-enter-active { opacity: 1; transform: translateY(0); transition: opacity 0.4s ease-out, transform 0.4s ease-out; }
+        .fade-exit { opacity: 1; transform: translateY(0); }
+        .fade-exit-active { opacity: 0; transform: translateY(-10px); transition: opacity 0.3s ease-in, transform 0.3s ease-in; }
+
+        /* Кастомный лоадер (спиннер) */
+        .loader {
+            width: 24px;
+            height: 24px;
+            border: 2px solid #e2e8f0;
+            border-bottom-color: #0ea5e9;
+            border-radius: 50%;
+            display: inline-block;
+            box-sizing: border-box;
+            animation: rotation 1s linear infinite;
+        }
+        .loader-white {
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-bottom-color: #ffffff;
+        }
+        @keyframes rotation {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Скрытие скроллбара */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col font-sans selection:bg-brand-blue selection:text-white">
+
+    <div style="text-align: right; padding: 10px; background-color: #f0f0f0; margin-bottom: 20px;">
+    {% if user.is_authenticated %}
+        <span>Привет, <strong>{{ user.username }}</strong>!</span> | 
+        <a href="{% url 'profile' %}">Мой кабинет</a> | 
+        <form action="{% url 'logout' %}" method="post" style="display:inline;">
+            {% csrf_token %}
+            <button type="submit">Выход</button>
+        </form>
+    {% else %}
+        <a href="{% url 'login' %}">Войти</a> | 
+        <a href="{% url 'register' %}">Регистрация</a>
+    {% endif %}
+</div>
+    <!-- Тосты (уведомления) -->
+    <div id="toast-container" class="fixed bottom-6 right-6 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
+    <!-- Кастомное модальное окно выхода (скрыто по умолчанию) -->
+    <div id="quit-modal" class="fixed inset-0 z-50 hidden flex-col items-center justify-center">
+        <!-- Темный фон (backdrop) -->
+        <div id="quit-modal-backdrop" class="absolute inset-0 bg-brand-black/40 backdrop-blur-sm transition-opacity opacity-0 duration-300"></div>
+        
+        <!-- Сама карточка окна -->
+        <div id="quit-modal-content" class="relative bg-white rounded-[2rem] p-8 shadow-2xl max-w-sm w-full mx-4 transform transition-all scale-95 opacity-0 duration-300">
+            <div class="w-12 h-12 bg-red-100 text-red-500 rounded-full flex items-center justify-center mb-4">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+            </div>
+            <h3 class="text-xl font-bold text-brand-black mb-2">Вы уверены?</h3>
+            <p class="text-brand-gray mb-6 text-sm">Весь текущий прогресс тестирования будет безвозвратно удален, результаты не сохранятся.</p>
+            
+            <div class="flex gap-3 w-full">
+                <button id="btn-cancel-quit" class="flex-1 px-4 py-3 rounded-xl border-2 border-gray-200 text-brand-black font-medium hover:bg-gray-50 transition-colors">
+                    Отмена
+                </button>
+                <button id="btn-confirm-quit" class="flex-1 px-4 py-3 rounded-xl bg-red-500 text-white font-medium hover:bg-red-600 transition-colors shadow-lg shadow-red-200">
+                    Да, выйти
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Основной контейнер экранов -->
+    <main class="flex-1 flex flex-col w-full max-w-6xl mx-auto px-4 sm:px-6 py-8">
+        
+        <!-- ================= EКРАН 1: ЛЕНДИНГ ================= -->
+        <section id="screen-landing" class="flex-1 flex flex-col items-center justify-center w-full fade-enter-active">
+            
+            <div class="text-center mb-10 max-w-2xl mx-auto px-4">
+                <h1 class="text-4xl md:text-5xl font-bold tracking-tight mb-4 text-brand-black">
+                    Узнайте свой <span class="text-brand-blue">уровень IQ</span>
+                </h1>
+                <p class="text-brand-gray text-base md:text-lg">
+                    Занимает до 15 минут / Адаптивные вопросы / Самые точные результаты
+                </p>
+            </div>
+
+            <div class="bg-white rounded-[2rem] p-8 md:p-10 shadow-card w-full max-w-xl mx-auto border border-gray-100">
+                <form id="start-form" class="space-y-6">
+                    <div>
+                        <label for="age" class="block text-sm font-medium text-brand-black mb-2">Ваш возраст</label>
+                        <input type="number" id="age" name="age" required min="14" max="99" placeholder="Например: 25" 
+                               class="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 focus:bg-white focus:border-brand-blue focus:ring-2 focus:ring-blue-100 outline-none transition-all text-base">
+                    </div>
+                    
+                    <div>
+                        <label for="sphere" class="block text-sm font-medium text-brand-black mb-2">Сфера деятельности</label>
+                        <select id="sphere" name="sphere" required 
+                                class="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 focus:bg-white focus:border-brand-blue focus:ring-2 focus:ring-blue-100 outline-none transition-all text-base cursor-pointer appearance-none">
+                            <option value="" disabled selected>Выберите из списка...</option>
+                            <option value="it">IT и разработка</option>
+                            <option value="science">Наука и образование</option>
+                            <option value="medicine">Медицина</option>
+                            <option value="finance">Финансы и аналитика</option>
+                            <option value="creative">Креативные индустрии</option>
+                            <option value="student">Студент</option>
+                            <option value="other">Другое</option>
+                        </select>
+                    </div>
+
+                    <div class="pt-4">
+                        <button type="submit" id="btn-start" class="group relative w-full flex items-center justify-center px-8 py-4 bg-brand-black text-white rounded-xl text-base font-medium transition-transform hover:scale-[1.02] active:scale-95 disabled:opacity-70 disabled:pointer-events-none shadow-lg shadow-slate-200">
+                            <span id="btn-start-text">Начать тестирование</span>
+                            <span id="btn-start-loader" class="loader loader-white absolute hidden"></span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </section>
+
+
+        <!-- ================= EКРАН 2: ЗАДАЧА ================= -->
+        <section id="screen-task" class="flex-1 flex flex-col w-full hidden opacity-0">
+            
+            <!-- Шапка задачи -->
+            <div class="w-full mb-6">
+                <div class="flex flex-col sm:flex-row justify-between items-center gap-4 mb-4">
+                    <div class="flex items-center gap-2">
+                        <span class="text-brand-gray font-medium text-lg">Вопрос</span>
+                        <span id="task-counter" class="font-bold text-xl text-brand-black">1</span>
+                    </div>
+
+                    <div class="inline-flex items-center gap-2 px-6 py-2.5 rounded-full border border-dashed border-brand-blue bg-white text-sm font-medium shadow-sm">
+                        <span class="text-brand-black">Время:</span>
+                        <span id="timer-display" class="text-red-500 font-mono">00:00</span>
+                    </div>
+                </div>
+
+                <!-- Прогресс-бар -->
+                <div class="w-full">
+                    <div class="flex justify-between items-center mb-1 text-xs font-medium text-brand-gray">
+                        <span>Точность оценки (калибровка)</span>
+                    </div>
+                    <div class="w-full h-2 bg-gray-200 rounded-full overflow-hidden">
+                        <div id="accuracy-progress-bar" class="h-full bg-brand-blue rounded-full transition-all duration-700 ease-out w-[5%]"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Карточки задачи -->
+            <div class="flex flex-col md:flex-row gap-6 w-full relative items-stretch justify-center">
+                
+                <!-- Оверлей загрузки -->
+                <div id="task-loader-overlay" class="absolute inset-[-10px] bg-brand-bg/60 backdrop-blur-[2px] z-10 hidden flex-col items-center justify-center transition-opacity rounded-[2rem]">
+                    <span class="loader mb-3"></span>
+                    <span class="font-medium text-sm text-brand-black bg-white px-4 py-2 rounded-full shadow-sm">Обработка ответа...</span>
+                </div>
+
+                <!-- Левая карточка: Условие -->
+                <div class="w-full md:w-3/5 bg-white rounded-[2rem] p-6 lg:p-8 shadow-card border border-gray-100 flex flex-col items-center justify-center">
+                    <h3 class="text-xl font-medium mb-6 text-brand-black text-center">Какой фигуры не хватает?</h3>
+                    <div class="w-full aspect-square flex items-center justify-center mx-auto" style="max-width: 500px;">
+                        <img id="task-image" src="" alt="Task Pattern" class="w-full h-full object-contain mix-blend-multiply opacity-0 transition-opacity duration-300">
+                    </div>
+                </div>
+
+                <!-- Правая карточка: Варианты ответов -->
+                <div class="w-full md:w-2/5 bg-white rounded-[2rem] p-6 lg:p-8 shadow-card border border-gray-100 flex flex-col items-center justify-start">
+                    <h3 class="text-xl font-medium mb-6 text-brand-black text-center">Выберите ваш ответ:</h3>
+                    
+                    <!-- Сетка ответов -->
+                    <div id="options-grid" class="grid grid-cols-2 gap-4 w-full mx-auto" style="max-width: 340px;">
+                        <!-- Кнопки генерируются через JS -->
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Нижняя кнопка -->
+            <div class="mt-8 w-full flex justify-start items-center">
+                <button id="btn-quit" class="px-6 py-2.5 rounded-xl border-2 border-gray-200 bg-white text-brand-black font-medium hover:border-gray-300 hover:bg-gray-50 transition-colors text-sm shadow-sm flex items-center gap-2">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                    Выйти
+                </button>
+            </div>
+        </section>
+
+
+        <!-- ================= EКРАН 3: РЕЗУЛЬТАТ ================= -->
+        <section id="screen-result" class="flex-1 flex flex-col items-center justify-center w-full hidden opacity-0 text-center py-10">
+    <div class="bg-white rounded-[2rem] p-8 md:p-10 shadow-card w-full max-w-xl mx-auto border border-gray-100">
+        <div class="w-20 h-20 bg-brand-blue text-white rounded-full flex items-center justify-center mb-6 mx-auto shadow-lg shadow-blue-200">
+            <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+        </div>
+        <h2 class="text-3xl font-bold mb-3 text-brand-black">Тестирование завершено</h2>
+        <p class="text-brand-gray mb-8">Алгоритм успешно скалибровал ваш уровень на основе ответов.</p>
+        
+        <div class="grid grid-cols-2 gap-4 mb-8">
+            <div class="p-6 bg-gray-50 rounded-2xl border border-gray-100 flex flex-col">
+                <span class="text-sm font-medium text-brand-gray mb-1">Ваш IQ Score</span>
+                <span id="final-score" class="text-4xl font-bold text-brand-blue">--</span>
+            </div>
+            <div class="p-6 bg-gray-50 rounded-2xl border border-gray-100 flex flex-col">
+                <span class="text-sm font-medium text-brand-gray mb-1">Решено верно</span>
+                <span class="text-4xl font-bold text-brand-black"><span id="final-tasks">--</span><span class="text-xl text-gray-400" id="final-total"></span></span>
+            </div>
+        </div>
+
+        <div id="analytics-container" class="bg-brand-bg rounded-2xl p-6 border border-brand-border mb-8 text-left hidden">
+            <h3 class="text-lg font-bold text-brand-black mb-4">Детальный анализ ответов</h3>
+            <div id="analytics-list" class="space-y-3 mb-6">
+                </div>
+            <div class="bg-white border-l-4 border-brand-blue p-4 rounded-xl text-sm font-medium leading-relaxed text-brand-gray shadow-sm">
+                <strong class="block mb-1 text-brand-black">Рекомендация алгоритма:</strong>
+                <span id="final-recommendation"></span>
+            </div>
+        </div>
+
+        <button id="btn-restart" class="w-full px-8 py-4 bg-brand-black text-white rounded-xl text-base font-medium transition-transform hover:scale-[1.02] active:scale-95 shadow-lg">
+            Начать новую сессию
+        </button>
+    </div>
+</section>
+
+    </main>
+
+    <script>
+        /**
+         * АРХИТЕКТУРА И СОСТОЯНИЕ ФРОНТЕНДА
+         */
+        const AppState = {
+            sessionId: localStorage.getItem('iq_session') || null,
+            currentScreen: 'landing', // landing, task, result
+            taskId: null,
+            taskStartTime: null,
+            timerInterval: null,
+            isSubmitting: false,
+            taskCount: 0
+        };
+
+        // DOM Элементы
+        const screens = {
+            landing: document.getElementById('screen-landing'),
+            task: document.getElementById('screen-task'),
+            result: document.getElementById('screen-result')
+        };
+        const toastContainer = document.getElementById('toast-container');
+        
+        // Элементы модального окна
+        const quitModal = document.getElementById('quit-modal');
+        const quitModalBackdrop = document.getElementById('quit-modal-backdrop');
+        const quitModalContent = document.getElementById('quit-modal-content');
+
+        /**
+         * РЕАЛЬНОЕ API ДЛЯ СВЯЗИ С DJANGO
+         */
+        const API = {
+            async start(data) {
+                const response = await fetch('/api/start/', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                return await response.json();
+            },
+            
+            async getTask(sessionId) {
+                const response = await fetch('/api/get_task/', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ session_id: sessionId })
+                });
+                return await response.json();
+            },
+            
+            async submitAnswer(data) {
+                const response = await fetch('/api/submit_answer/', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                return await response.json();
+            }
+        };
+
+        /**
+         * УПРАВЛЕНИЕ UI
+         */
+        function switchScreen(targetScreenId) {
+            const current = screens[AppState.currentScreen];
+            const target = screens[targetScreenId];
+
+            if (current === target) return;
+
+            current.classList.remove('fade-enter-active');
+            current.classList.add('fade-exit-active');
+
+            setTimeout(() => {
+                current.classList.add('hidden');
+                current.classList.remove('fade-exit-active', 'fade-exit');
+                current.style.opacity = '0';
+
+                target.classList.remove('hidden');
+                void target.offsetWidth; // Force reflow
+
+                target.classList.add('fade-enter-active');
+                target.style.opacity = '1';
+
+                AppState.currentScreen = targetScreenId;
+                
+                // Прокрутка страницы наверх при смене экрана
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }, 300);
+        }
+
+        function showToast(message, type = 'error') {
+            const toast = document.createElement('div');
+            const bg = type === 'error' ? 'bg-red-500' : 'bg-brand-black';
+            toast.className = `${bg} text-white px-5 py-3 rounded-xl text-sm font-medium shadow-lg transform translate-y-10 opacity-0 transition-all duration-300 flex items-center gap-3`;
+            toast.innerHTML = `
+                ${type === 'error' ? '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>' : ''}
+                ${message}
+            `;
+            
+            toastContainer.appendChild(toast);
+            
+            setTimeout(() => toast.classList.remove('translate-y-10', 'opacity-0'), 10);
+            setTimeout(() => {
+                toast.classList.add('opacity-0');
+                setTimeout(() => toast.remove(), 300);
+            }, 4000);
+        }
+        
+        /**
+         * Управление Модальным Окном Выхода
+         */
+        function showQuitModal() {
+            quitModal.classList.remove('hidden');
+            quitModal.classList.add('flex');
+            // Force reflow
+            void quitModal.offsetWidth;
+            
+            quitModalBackdrop.classList.remove('opacity-0');
+            quitModalBackdrop.classList.add('opacity-100');
+            
+            quitModalContent.classList.remove('scale-95', 'opacity-0');
+            quitModalContent.classList.add('scale-100', 'opacity-100');
+        }
+
+        function hideQuitModal() {
+            quitModalBackdrop.classList.remove('opacity-100');
+            quitModalBackdrop.classList.add('opacity-0');
+            
+            quitModalContent.classList.remove('scale-100', 'opacity-100');
+            quitModalContent.classList.add('scale-95', 'opacity-0');
+            
+            setTimeout(() => {
+                quitModal.classList.remove('flex');
+                quitModal.classList.add('hidden');
+            }, 300); // Ожидаем окончания CSS-анимации
+        }
+
+        /**
+         * ТАЙМЕР И ПРОГРЕСС
+         */
+        function updateTimerDisplay() {
+            if (!AppState.taskStartTime) return;
+            const now = Date.now();
+            const diff = Math.floor((now - AppState.taskStartTime) / 1000);
+            const m = String(Math.floor(diff / 60)).padStart(2, '0');
+            const s = String(diff % 60).padStart(2, '0');
+            document.getElementById('timer-display').textContent = `${m}:${s} мин.`;
+        }
+
+        function startTimer() {
+            clearInterval(AppState.timerInterval);
+            AppState.taskStartTime = Date.now();
+            document.getElementById('timer-display').textContent = "00:00 мин.";
+            AppState.timerInterval = setInterval(updateTimerDisplay, 1000);
+        }
+
+        function stopTimer() {
+            clearInterval(AppState.timerInterval);
+        }
+
+        function getTimeSpent() {
+            if (!AppState.taskStartTime) return 0;
+            return (Date.now() - AppState.taskStartTime) / 1000;
+        }
+
+        function updateAccuracyProgress(currentError) {
+            const MAX_ERROR = 2.0; 
+            const TARGET_ERROR = 0.2; 
+            
+            const err = Math.max(TARGET_ERROR, Math.min(MAX_ERROR, parseFloat(currentError)));
+            const percentage = ((MAX_ERROR - err) / (MAX_ERROR - TARGET_ERROR)) * 100;
+            
+            const bar = document.getElementById('accuracy-progress-bar');
+            if (bar) bar.style.width = `${percentage}%`;
+        }
+
+        /**
+         * ОСНОВНАЯ ЛОГИКА
+         */
+        
+        // 1. Старт с Лендинга
+        document.getElementById('start-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const btn = document.getElementById('btn-start');
+            const text = document.getElementById('btn-start-text');
+            const loader = document.getElementById('btn-start-loader');
+            
+            const age = document.getElementById('age').value;
+            const sphere = document.getElementById('sphere').value;
+
+            btn.disabled = true;
+            text.classList.add('invisible');
+            loader.classList.remove('hidden');
+
+            try {
+                const data = await API.start({ age, sphere });
+                
+                if (data.status === 'ok') {
+                    AppState.sessionId = data.session_id;
+                    localStorage.setItem('iq_session', data.session_id);
+                    AppState.taskCount = 0;
+                    loadNextTask();
+                } else {
+                    showToast('Ошибка: ' + (data.message || 'Не удалось начать сессию.'));
+                }
+            } catch (err) {
+                showToast('Ошибка подключения к серверу.');
+            } finally {
+                btn.disabled = false;
+                text.classList.remove('invisible');
+                loader.classList.add('hidden');
+            }
+        });
+
+        // 2. Загрузка задачи
+        async function loadNextTask() {
+            switchScreen('task');
+            const overlay = document.getElementById('task-loader-overlay');
+            overlay.classList.remove('hidden');
+            overlay.style.display = 'flex';
+
+            try {
+                const data = await API.getTask(AppState.sessionId);
+                
+                if (data.status === 'finished') {
+                    finishTest(data);
+                    return;
+                }
+
+                if (data.status === 'ok') {
+                    renderTask(data.task, data.current_error);
+                } else {
+                     showToast('Ошибка сервера: ' + (data.message || 'Нет данных.'));
+                     overlay.classList.add('hidden');
+                     overlay.style.display = 'none';
+                }
+            } catch (err) {
+                showToast('Не удалось загрузить задачу. Повторная попытка...', 'error');
+                setTimeout(loadNextTask, 3000);
+            }
+        }
+
+        // 3. Рендер задачи
+        function renderTask(task, error) {
+            AppState.taskId = task.id;
+            AppState.taskCount++;
+            AppState.isSubmitting = false;
+
+            document.getElementById('task-counter').textContent = AppState.taskCount;
+            updateAccuracyProgress(error);
+
+            const imgEl = document.getElementById('task-image');
+            imgEl.style.opacity = '0';
+            imgEl.onload = () => { imgEl.style.opacity = '1'; };
+            imgEl.src = task.main_image;
+
+            const grid = document.getElementById('options-grid');
+            grid.innerHTML = '';
+            
+            task.options.forEach(opt => {
+                const btn = document.createElement('button');
+                btn.className = 'group relative aspect-square rounded-2xl transition-all focus:outline-none focus:ring-4 focus:ring-brand-blue flex items-center justify-center hover:-translate-y-1 hover:shadow-xl cursor-pointer';
+                
+                btn.onclick = () => submitAnswer(opt.id, btn);
+                
+                const img = document.createElement('img');
+                img.src = opt.url;
+                img.className = 'w-full h-full object-contain mix-blend-multiply transition-transform group-active:scale-95';
+                
+                btn.appendChild(img);
+                grid.appendChild(btn);
+            });
+
+            const overlay = document.getElementById('task-loader-overlay');
+            overlay.classList.add('hidden');
+            overlay.style.display = 'none';
+            startTimer();
+        }
+
+        // 4. Отправка ответа
+        async function submitAnswer(optionId, btnElement) {
+            if (AppState.isSubmitting) return; 
+            
+            AppState.isSubmitting = true;
+            stopTimer();
+            const timeSpent = getTimeSpent();
+
+            btnElement.classList.add('ring-4', 'ring-brand-blue', 'scale-95');
+
+            const overlay = document.getElementById('task-loader-overlay');
+            overlay.classList.remove('hidden');
+            overlay.style.display = 'flex';
+
+            try {
+                const res = await API.submitAnswer({
+                    session_id: AppState.sessionId,
+                    task_id: AppState.taskId,
+                    user_answer: optionId,
+                    time_spent: timeSpent
+                });
+
+                if (res.status === 'ok') {
+                    loadNextTask();
+                } else {
+                     showToast('Ошибка: ' + (res.message || 'Ответ не принят.'));
+                     btnElement.classList.remove('ring-4', 'ring-brand-blue', 'scale-95');
+                     AppState.isSubmitting = false;
+                     startTimer();
+                     overlay.classList.add('hidden');
+                     overlay.style.display = 'none';
+                }
+            } catch (err) {
+                showToast('Ошибка сети. Попробуйте еще раз.');
+                btnElement.classList.remove('ring-4', 'ring-brand-blue', 'scale-95');
+                AppState.isSubmitting = false;
+                startTimer();
+                overlay.classList.add('hidden');
+                overlay.style.display = 'none';
+            }
+        }
+
+        // 5. Завершение теста
+        // 5. Завершение теста
+function finishTest(data) {
+    localStorage.removeItem('iq_session');
+    document.getElementById('final-score').textContent = data.final_score;
+    document.getElementById('final-tasks').textContent = data.tasks_solved;
+    document.getElementById('final-total').textContent = '/' + data.total_asked;
+    
+    // Рендер умной аналитики
+    if (data.analytics) {
+        const list = document.getElementById('analytics-list');
+        list.innerHTML = '';
+        
+        for (const [type, stats] of Object.entries(data.analytics)) {
+            const row = document.createElement('div');
+            // Цвета в зависимости от успеха
+            const isPerfect = stats.correct === stats.total;
+            const isBad = stats.correct === 0;
+            const color = isPerfect ? 'text-green-600' : (isBad ? 'text-red-500' : 'text-orange-500');
+            
+            row.className = 'flex justify-between items-center text-sm border-b border-gray-200 pb-2 last:border-0 last:pb-0';
+            row.innerHTML = `
+                <span class="text-brand-gray font-medium uppercase tracking-wider text-xs">${type}</span>
+                <span class="font-bold ${color}">${stats.correct} из ${stats.total}</span>
+            `;
+            list.appendChild(row);
+        }
+        
+        document.getElementById('final-recommendation').textContent = data.recommendation;
+        document.getElementById('analytics-container').classList.remove('hidden');
+    }
+
+    switchScreen('result');
+}
+
+        // Слушатели для модального окна выхода
+        document.getElementById('btn-quit').onclick = showQuitModal;
+        document.getElementById('btn-cancel-quit').onclick = hideQuitModal;
+        document.getElementById('quit-modal-backdrop').onclick = hideQuitModal;
+        
+        document.getElementById('btn-confirm-quit').onclick = () => {
+            localStorage.removeItem('iq_session');
+            location.reload();
+        };
+
+        document.getElementById('btn-restart').onclick = () => {
+            location.reload();
+        };
+
+        /**
+         * ИНИЦИАЛИЗАЦИЯ
+         */
+        window.addEventListener('DOMContentLoaded', () => {
+            screens.landing.classList.add('fade-enter-active');
+            
+            if (AppState.sessionId) {
+                showToast('Восстановление сессии...', 'info');
+                screens.landing.classList.add('hidden');
+                screens.landing.classList.remove('fade-enter-active');
+                loadNextTask();
+            }
+        });
+
+        window.addEventListener('offline', () => {
+            showToast('Отсутствует интернет-соединение.');
+        });
+        window.addEventListener('online', () => {
+            showToast('Соединение восстановлено!', 'info');
+            document.getElementById('toast-container').lastChild.classList.replace('bg-brand-black', 'bg-green-600');
+        });
+
+    </script>
+</body>
+</html>
